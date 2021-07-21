@@ -9,7 +9,7 @@ with open(path.join(settings.BASE_DIR, '..', 'README.md'), encoding='utf-8') as 
 
 setup(
     name='garpix_utils',
-    version='1.0.0',
+    version='1.0.1',
     description='',
     long_description=long_description,
     url='https://github.com/garpixcms/garpix_utils',
@@ -30,7 +30,7 @@ setup(
     include_package_data=True,
     zip_safe=False,
     install_requires=[
-        'garpixcms >= 1.7.0',
+        'Django >= 1.11',
         'django-uuslug >= 1.2.0',
     ],
 )
