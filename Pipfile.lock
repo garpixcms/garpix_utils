@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "85f5679e5e72c16ce3841fd971fd284f43095fa3f63d135d92f66366b30fe74d"
+            "sha256": "d1bd9282fe0c3d27b727edf6197163271db8e7cbb46a11bcab3414f73aba46f5"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -128,6 +128,42 @@
             "index": "pypi",
             "version": "==3.1"
         },
+        "django-js-asset": {
+            "hashes": [
+                "sha256:8ec12017f26eec524cab436c64ae73033368a372970af4cf42d9354fcb166bdd",
+                "sha256:c163ae80d2e0b22d8fb598047cd0dcef31f81830e127cfecae278ad574167260"
+            ],
+            "version": "==1.2.2"
+        },
+        "django-mptt": {
+            "hashes": [
+                "sha256:63b421a054bceb7406582e2be876a80b3848a5106765baea1003696348ffd628",
+                "sha256:8ae6c3821127b529bb2f938de27bf0771b1bcbe9dbccdfba33986af78611f13a"
+            ],
+            "markers": "python_version >= '3.6'",
+            "version": "==0.12.0"
+        },
+        "django-polymorphic": {
+            "hashes": [
+                "sha256:73b75eb44ea302bd32820f8661e469509d245ce7f7ff09cd2ad149e5c42034ff",
+                "sha256:9d886f19f031d26bb1391c055ed9be06fb226a04a4cec1842b372c58873b3caa"
+            ],
+            "version": "==3.0.0"
+        },
+        "django-polymorphic-tree-for-garpix-page": {
+            "hashes": [
+                "sha256:c83e857394a41c2b8523025d606d8409d314f6f9af3a27eaff4d60047ca466fb"
+            ],
+            "index": "pypi",
+            "version": "==2.0.1"
+        },
+        "django-tag-parser": {
+            "hashes": [
+                "sha256:903cd4bf3692c8c060770ca2b9d6e74e4ee52d6078308852acffe1ef4a49e0f7",
+                "sha256:92e5da35d8774a6ab4e0ac0b3b2229b8a0b78a61c5a3b0fd159255f0a66c08d7"
+            ],
+            "version": "==3.2"
+        },
         "django-uuslug": {
             "hashes": [
                 "sha256:bf0872618acc61f7ace65b96ae71d63f347595c8b990942834f1ba9448af19ec"
@@ -245,11 +281,11 @@
         },
         "marshmallow": {
             "hashes": [
-                "sha256:77368dfedad93c3a041cbbdbce0b33fac1d8608c9e2e2288408a43ce3493d2ff",
-                "sha256:d4090ca9a36cd129126ad8b10c3982c47d4644a6e3ccb20534b512badce95f35"
+                "sha256:c67929438fd73a2be92128caa0325b1b5ed8b626d91a094d2f7f2771bf1f1c0e",
+                "sha256:dd4724335d3c2b870b641ffe4a2f8728a1380cd2e7e2312756715ffeaa82b842"
             ],
             "markers": "python_version >= '3.5'",
-            "version": "==3.12.2"
+            "version": "==3.13.0"
         },
         "mccabe": {
             "hashes": [

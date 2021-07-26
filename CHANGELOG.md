@@ -1,3 +1,7 @@
+### 1.1.0 (22.07.2021)
+
+- Добавлены `models.EmptyMixin`, `models.PolymorphicActiveMixin`, `managers.PolymorphicActiveManager`, `models.AvailableMixin`.
+
 ### 1.0.2 (21.07.2021)
 
 - Убран `objects` из ActiveMixin.
