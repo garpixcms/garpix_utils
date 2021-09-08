@@ -1,3 +1,7 @@
+08.09.2021)
+
+- Добавлен AdminDeleteMixin.
+
 ### 1.2.0 (08.09.2021)
 
 - Добавлен template tag `url_replace`.
