@@ -11,9 +11,9 @@ twine = "*"
 m2r = "*"
 garpix-qa = "*"
 django = "==3.1"
-garpix-pack = "*"
 django-uuslug = "*"
 django-polymorphic-tree-for-garpix-page = "*"
+garpix-package = "*"
 
 [dev-packages]
 
