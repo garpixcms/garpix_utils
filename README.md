@@ -11,6 +11,7 @@
 * `models.EmptyMixin` - миксин-пустышка, который можно использовать при обязательных миксинах
 * `models.AvailableMixin` - миксин для моделей, которые должны обладать полями "Активность" и "Удалено"
 * `models.PolymorphicActiveMixin` - миксин для модели `garpix_page.BasePage`, добавляет возможность выбора доступных страниц (которые активны). Используется внутри GARPIX CMS.
+* `templatetags.url_replace` - подмена одного значения в dict на другое в Django-шаблонах.
 
 ## Установка
 
@@ -215,6 +216,24 @@ class Product(AvailableMixin, models.Model):
 Product.available_objects.all()
 
 # Будут выбраны записи только с is_active == True.
+```
+
+#### `templatetags.url_replace` - подмена одного значения в dict на другое в Django-шаблонах.
+
+ПРИМЕР для пагинации (взято из https://github.com/garpixcms/garpix_page/):
+
+```
+{% load url_replace %}
+
+<nav>
+    <ul class="pagination">
+        {% for page_num in page_range %}
+            <li class="page-item {% if page_num == page %}active{% endif %}">
+                <a class="page-link" href="?{% url_replace request 'page' page_num %}">{{ page_num }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+</nav>
 ```
 
 # Changelog

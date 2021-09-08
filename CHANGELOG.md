@@ -1,3 +1,7 @@
+### 1.2.0 (08.09.2021)
+
+- Добавлен template tag `url_replace`.
+
 ### 1.1.0 (22.07.2021)
 
 - Добавлены `models.EmptyMixin`, `models.PolymorphicActiveMixin`, `managers.PolymorphicActiveManager`, `models.AvailableMixin`.
