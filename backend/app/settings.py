@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'app',
     'garpix_qa',
-    'garpix_pack',
+    'garpix_package',
 ]
 
 MIDDLEWARE = [
