@@ -1,3 +1,7 @@
+### 1.5.0 (29.07.2022)
+
+- Добавлены менеджеры `GCurrentSiteManager`, `GPolymorphicCurrentSiteManager`.
+
 ### 1.4.0 (14.09.2021)
 
 - Добавлен `GarpixPaginator`.
