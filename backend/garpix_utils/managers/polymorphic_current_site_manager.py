@@ -10,4 +10,4 @@ class GPolymorphicCurrentSiteManager(CurrentSiteManager, PolymorphicMPTTModelMan
         qs = self.queryset_class(self.model, using=self._db, hints=self._hints)
         if self.model._meta.proxy:
             qs = qs.instance_of(self.model)
-        return qs.filter(**{self._get_field_name() + '__id': settings.getattr('SITE_ID', 1)})
+        return qs.filter(**{self._get_field_name() + '__id': getattr(settings, 'SITE_ID', 1)})

@@ -1,3 +1,7 @@
+### 1.5.1 (07.09.2022)
+
+- Поправлен баг: `'Settings' object has no attribute 'getattr'`
+
 ### 1.5.0 (29.07.2022)
 
 - Добавлены менеджеры `GCurrentSiteManager`, `GPolymorphicCurrentSiteManager`.
