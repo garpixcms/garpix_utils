@@ -1,7 +1,5 @@
 from setuptools import setup, find_packages
 from os import path
-from m2r import convert
-from django.conf import settings
 
 
 here = path.join(path.abspath(path.dirname(__file__)), 'garpix_utils')
