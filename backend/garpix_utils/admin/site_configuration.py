@@ -13,8 +13,8 @@ class GarpixSiteConfigurationAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         ModelClass = self.model
-        lines = ModelClass.objects.all().values_list('site', flat=True)
-        sites = Site.objects.exclude(id__in=lines)
+        ids = ModelClass.objects.all().values_list('site', flat=True)
+        sites = Site.objects.exclude(id__in=ids)
         for site in sites:
             ModelClass.objects.create(site=site)
         return super().get_queryset(request)
