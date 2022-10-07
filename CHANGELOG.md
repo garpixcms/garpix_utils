@@ -1,3 +1,7 @@
+### 1.6.0 (07.10.2022)
+
+- Добавлен класс для добавления мультисайтовых настроек `GarpixSiteConfiguration`
+
 ### 1.5.1 (07.09.2022)
 
 - Поправлен баг: `'Settings' object has no attribute 'getattr'`
