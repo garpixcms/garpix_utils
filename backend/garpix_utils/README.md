@@ -12,6 +12,10 @@
 * `models.AvailableMixin` - миксин для моделей, которые должны обладать полями "Активность" и "Удалено"
 * `models.PolymorphicActiveMixin` - миксин для модели `garpix_page.BasePage`, добавляет возможность выбора доступных страниц (которые активны). Используется внутри GARPIX CMS.
 * `templatetags.url_replace` - подмена одного значения в dict на другое в Django-шаблонах.
+* `models.DeleteMixin` - миксин для моделей, добавляющий функционал мягкого/жесткого удаления, `models.AdminDeleteMixin` - миксин для админ.модели.
+* `models.PolymorphicAvailableMixin` - миксин для модели `garpix_page.BasePage`, добавляет возможность выбора доступных страниц (которые активны и неудалены). Используется внутри GARPIX CMS.
+* `models.GarpixSiteConfiguration` - класс для добавления мультисайтовых настроек в проекте, `admin.GarpixSiteConfigurationAdmin` - класс для админ.панели
+
 
 ## Установка
 
