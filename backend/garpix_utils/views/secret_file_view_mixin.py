@@ -14,6 +14,5 @@ class SecretFileViewMixin(viewsets.GenericViewSet):
         try:
             return FileResponse(open(instance.file.path, 'rb'))
 
-        except IOError as e:
-            print(e)
+        except IOError:
             raise Http404

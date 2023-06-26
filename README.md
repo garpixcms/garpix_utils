@@ -358,10 +358,13 @@ class Attachment(SecretFileMixin, models.Model):
 ```python
 from garpix_utils.views import SecretFileViewMixin
 from rest_framework import viewsets
+from app.models import Attachment
+
 
 class AttachmentsView(SecretFileViewMixin, viewsets.GenericViewSet):
     # ...
-    pass
+    queryset = Attachment.objects.all()
+    # ...
 ```
 
 4. Добавить миксин `serializers.SecretFileSerializerMixin` к serializer:
