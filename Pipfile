@@ -15,6 +15,7 @@ django-uuslug = "*"
 django-polymorphic-tree-for-garpix-page = "*"
 garpix-package = "*"
 django-modeltranslation = "*"
+djangorestframework = "*"
 
 [dev-packages]
 

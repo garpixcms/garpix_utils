@@ -4,18 +4,27 @@
 
 Утилиты:
 
-* `file.get_file_path` - генерация пути для сохранения файла (для FileField)
+* `file.get_file_path` - генерация пути для сохранения файла (для FileField) [DEPRECATED]
+* `file.UploadTo` - генерация пути для сохранения файла (для FileField)
 * `string.get_random_string` - создание строки случайных символов
+* `string.GenerateHash` - создание строки случайных символов (для CharField)
 * `signature.make_signature_sha512` - создание цифровой подписи
 * `models.ActiveMixin` - миксин для моделей, которым необходимо поле "Активность"
 * `models.EmptyMixin` - миксин-пустышка, который можно использовать при обязательных миксинах
 * `models.AvailableMixin` - миксин для моделей, которые должны обладать полями "Активность" и "Удалено"
-* `models.PolymorphicActiveMixin` - миксин для модели `garpix_page.BasePage`, добавляет возможность выбора доступных страниц (которые активны). Используется внутри GARPIX CMS.
+* `models.PolymorphicActiveMixin` - миксин для модели `garpix_page.BasePage`, добавляет возможность выбора доступных
+  страниц (которые активны). Используется внутри GARPIX CMS.
 * `templatetags.url_replace` - подмена одного значения в dict на другое в Django-шаблонах.
-* `models.DeleteMixin` - миксин для моделей, добавляющий функционал мягкого/жесткого удаления, `models.AdminDeleteMixin` - миксин для админ.модели.
-* `models.PolymorphicAvailableMixin` - миксин для модели `garpix_page.BasePage`, добавляет возможность выбора доступных страниц (которые активны и неудалены). Используется внутри GARPIX CMS.
-* `models.GarpixSiteConfiguration` - класс для добавления мультисайтовых настроек в проекте, `admin.GarpixSiteConfigurationAdmin` - класс для админ.панели
-
+* `models.DeleteMixin` - миксин для моделей, добавляющий функционал мягкого/жесткого удаления, `models.AdminDeleteMixin`
+  - миксин для админ.модели.
+* `models.PolymorphicAvailableMixin` - миксин для модели `garpix_page.BasePage`, добавляет возможность выбора доступных
+  страниц (которые активны и неудалены). Используется внутри GARPIX CMS.
+* `models.GarpixSiteConfiguration` - класс для добавления мультисайтовых настроек в
+  проекте, `admin.GarpixSiteConfigurationAdmin` - класс для админ.панели
+* `string.secret_file_storage` - получение хранилища скрытых файлов (для FileField)
+* `models.SecretFileMixin` - миксин для моделей, работа со скрытыми файлами
+* `views.SecretFileViewMixin` - миксин для drf viewset, работа со скрытыми файлами
+* `serializers.SecretFileSerializerMixin` - миксин для drf serializer, работа со скрытыми файлами
 
 ## Установка
 
@@ -27,11 +36,33 @@ pip install garpix_utils
 
 ### Утилиты
 
-#### `file.get_file_path` - генерация пути для сохранения файла (для FileField)
+#### `file.UploadTo` - генерация пути для сохранения файла (для FileField)
+
+Класс, каждый вызов которого формирует путь файла относительно названия модели, поля года и месяца, чтобы множество
+файлов не скапливались на одном уровне.
+
+Можно использовать в качестве значения 'UploadTo' поля FileField модели Django.
+
+ПРИМЕР:
+
+```
+from garpix_utils.file import get_file_path
+from django.db import models
+
+
+class FileModel(models.Model):
+    # ...
+    file = models.FileField(upload_to=UploadTo('file'), blank=True, null=True, verbose_name=_('File'))
+    # ...
+```
+
+Параметр 'file' - название поля в пути к файлу.
+
+#### `file.get_file_path` - генерация пути для сохранения файла (для FileField) [DEPRECATED]
 
 Формирует путь файла относительно года и месяца, чтобы множество файлов не скапливались на одном уровне.
 
-Можно использовать в качестве значения 'upload_to' поля FileField модели Django. 
+Можно использовать в качестве значения 'upload_to' поля FileField модели Django.
 
 ПРИМЕР:
 
@@ -46,7 +77,6 @@ class FileModel(models.Model):
     # ...
 ```
 
-
 #### `string.get_random_string` - создание строки случайных символов
 
 Создает случайную строку указанного размера и с указанными символами.
@@ -54,7 +84,8 @@ class FileModel(models.Model):
 Параметры:
 
 * size: int - количество символов. По умолчанию - 8.
-* chars: str - строка из списка символов, которые могут быть в строке. По умолчанию `string.ascii_uppercase + string.digits`.
+* chars: str - строка из списка символов, которые могут быть в строке. По
+  умолчанию `string.ascii_uppercase + string.digits`.
 
 ПРИМЕР:
 
@@ -89,6 +120,25 @@ random_string = get_random_string(16, '01')
 # random_string = '0110111101010100'
 ```
 
+### `string.GenerateHash` - создание строки случайных символов (для CharField)
+
+Класс, каждый вызов которого создает случайную строку, используя метод `get_random_string` указанной длины.
+
+Параметры:
+
+* hash_length: int - количество символов. По умолчанию - 32.
+
+Пример:
+
+```
+from garpix_utils.file.file_field import UploadTo
+
+class FileModel(models.Model):
+    # ...
+    share_hash = models.CharField(max_length=32, null=True, default=GenerateHash(32), blank=True)
+    # ...
+```
+
 #### `signature.make_signature_sha512` - создание цифровой подписи
 
 Создает сигнатуру (цифровую подпись) по указанным параметрам с хэшированием SHA-512.
@@ -105,8 +155,10 @@ random_string = get_random_string(16, '01')
 
 Алгоритм:
 
-1. Берет словарь параметров, удаляет оттуда параметр с ключом сигнатуры (см. переменную signature_key, по умолчанию значение "sig")
-2. Получившийся словарь сортирует по названию ключа в алфавитном порядке. Все вложенные данные тоже сортируются по ключу, списочные - просто по алфавиту.
+1. Берет словарь параметров, удаляет оттуда параметр с ключом сигнатуры (см. переменную signature_key, по умолчанию
+   значение "sig")
+2. Получившийся словарь сортирует по названию ключа в алфавитном порядке. Все вложенные данные тоже сортируются по
+   ключу, списочные - просто по алфавиту.
 3. Последовательно конкатенирует ключ со значением в единую строку.
 4. В конце конкатенирует значение переменной secret (по умолчанию равна "secret").
 5. Хэширует по алгоритму SHA-512 и возвращает строку в нижнем регистре.
@@ -119,8 +171,9 @@ random_string = get_random_string(16, '01')
 
 from garpix_utils.signature import make_signature_sha512
 
-
-sig = make_signature_sha512({'a': 'xxx', 'c': 'ggg', 'b': '111', 'sig': '123', 'd': [3, 1, 2], 'e': {'b': '2', 'a': '1'}}, signature_key='sig', secret='secret')
+sig = make_signature_sha512(
+    {'a': 'xxx', 'c': 'ggg', 'b': '111', 'sig': '123', 'd': [3, 1, 2], 'e': {'b': '2', 'a': '1'}}, signature_key='sig',
+    secret='secret')
 
 # sig = '2123086085ec1fe67595d7b3d2b6a0dbf3f33e528d78366b8d62d7f0a7e3c090077b0f7b8dc84921a6087aa57b8284bd1e74702df7a16e96f73f627e6eea815a'
 ```
@@ -150,11 +203,13 @@ sig = make_signature_sha512({'a': 'xxx', 'c': 'ggg', 'b': '111', 'sig': '123', '
 **Шаг 5**
 
 * Было: 'axxxb111cgggd123ea1b2secret'
-* Стало: '2123086085ec1fe67595d7b3d2b6a0dbf3f33e528d78366b8d62d7f0a7e3c090077b0f7b8dc84921a6087aa57b8284bd1e74702df7a16e96f73f627e6eea815a'
+* Стало: '
+  2123086085ec1fe67595d7b3d2b6a0dbf3f33e528d78366b8d62d7f0a7e3c090077b0f7b8dc84921a6087aa57b8284bd1e74702df7a16e96f73f627e6eea815a'
 
 #### `models.ActiveMixin` - миксин для моделей, которым необходимо поле "Активность"
 
-Добавляет поле `is_active (Boolean, default=True)`. Добавляет менеджера `active_objects`, который выбирает только активные объекты (`is_active=True`).
+Добавляет поле `is_active (Boolean, default=True)`. Добавляет менеджера `active_objects`, который выбирает только
+активные объекты (`is_active=True`).
 
 ПРИМЕР:
 
@@ -202,7 +257,8 @@ GARPIX_BLOG_MIXIN = 'garpix_utils.models.EmptyMixin'
 
 #### `models.AvailableMixin` - миксин для моделей, которые должны обладать полями "Активность" и "Удалено"
 
-Добавляет поля `is_active (Boolean, default=True)` и `is_deleted (Boolean, default=False)`. Добавляет менеджера `available_objects`, который выбирает только доступные объекты (`is_active=True, is_deleted=False`).
+Добавляет поля `is_active (Boolean, default=True)` и `is_deleted (Boolean, default=False)`. Добавляет
+менеджера `available_objects`, который выбирает только доступные объекты (`is_active=True, is_deleted=False`).
 
 ПРИМЕР:
 
@@ -239,6 +295,95 @@ Product.available_objects.all()
     </ul>
 </nav>
 ```
+
+#### `file.secret_file_storage` - получение хранилища скрытых файлов
+
+Устанавливает хранилище для файлов в поле модели, указанное в настройках `SECRET_MEDIA_ROOT`.
+
+Пример:
+
+Файл настроек:
+
+```python
+# settings.py
+
+import os
+from app.basedir import BASE_DIR
+
+SECRET_MEDIA_ROOT = os.path.join(BASE_DIR, '..', 'secret_public', 'media')
+
+```
+
+Модель с полем файла:
+
+```python
+from garpix_utils.file.file_field import UploadTo, secret_file_storage
+from django.db import models
+
+
+class FileModel(models.Model):
+    # ...
+    file = models.FileField(upload_to=UploadTo('file'), storage=secret_file_storage)
+    # ...
+```
+
+#### `models.SecretFileMixin`, `views.SecretFileViewMixin`, `serializers.SecretFileSerializerMixin` - работа со скрытыми файлами
+
+Использование файлов в закрытой папке:
+
+1. Добавить настройку `SECRET_MEDIA_ROOT`:
+
+```python
+# settings.py
+
+import os
+from app.basedir import BASE_DIR
+
+SECRET_MEDIA_ROOT = os.path.join(BASE_DIR, '..', 'secret_public', 'media')
+
+```
+
+2. Добавить миксин `models.SecretFileMixin` к модели:
+
+```python
+from django.db import models
+from garpix_utils.models import SecretFileMixin
+
+class Attachment(SecretFileMixin, models.Model):
+    # ...
+    pass
+
+```
+
+3. Добавить миксин `views.SecretFileViewMixin` к view:
+
+```python
+from garpix_utils.views import SecretFileViewMixin
+from rest_framework import viewsets
+from app.models import Attachment
+
+
+class AttachmentsView(SecretFileViewMixin, viewsets.GenericViewSet):
+    # ...
+    queryset = Attachment.objects.all()
+    # ...
+```
+
+4. Добавить миксин `serializers.SecretFileSerializerMixin` к serializer:
+
+```python
+from rest_framework import serializers
+from garpix_utils.serializers import SecretFileSerializerMixin
+
+
+class AttachmentSerializer(SecretFileSerializerMixin, serializers.ModelSerializer):
+    
+    view_basename = 'attachments'
+
+    # ...
+```
+
+`view_basename` - basename view в url. 
 
 # Changelog
 

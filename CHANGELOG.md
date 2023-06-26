@@ -1,3 +1,11 @@
+### 1.9.0-rc1 (26.06.2023)
+
+- [DEPRECETED] get_file_path
+- Добавлен класс `UploadTo` - замена функции `get_file_path` (генерирует путь с учетом названия модели и поля)
+- Добавлен класс `GenerateHash` - создание строки случайных символов (для CharField)
+- Добавлена функция `secret_file_storage` - получение хранилища скрытых файлов (для FileField)
+- Добавлены миксины `SecretFileMixin`, `SecretFileViewMixin`, `SecretFileSerializerMixin` для моделей, вью и сериалайзеров соответственно - работа со скрытыми файлами (см. `Readme.md`)
+
 ### 1.8.0 (26.01.2023)
 
 - Добавлен менеджер `ActiveOnSiteManager`
@@ -32,7 +40,8 @@
 
 ### 1.1.0 (22.07.2021)
 
-- Добавлены `models.EmptyMixin`, `models.PolymorphicActiveMixin`, `managers.PolymorphicActiveManager`, `models.AvailableMixin`.
+- Добавлены `models.EmptyMixin`, `models.PolymorphicActiveMixin`, `managers.PolymorphicActiveManager`
+  , `models.AvailableMixin`.
 
 ### 1.0.2 (21.07.2021)
 
