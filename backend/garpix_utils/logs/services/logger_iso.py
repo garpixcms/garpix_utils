@@ -22,9 +22,9 @@ class LoggerIso:
         log += f' | sbj=\"{sbj}\"' if sbj else ''
         log += f' | sbj_addr=\"{sbj_address}\"' \
                f' | act_type=\"{action.type.value}\"' \
-               f' | lvl={action.level.value} | obj={obj}' \
+               f' | lvl=\"{action.level.value}\" | obj=\"{obj}\"' \
                f' | obj_addr=\"{obj_address}\"' \
-               f' | result={result.value}'
+               f' | result=\"{result.value}\"'
         log += f' | change=\"{params}\"' if params else ''
         log += f' | msg=\"{msg}\"'
         hostname, local_ip = self.get_host_info()
@@ -34,8 +34,8 @@ class LoggerIso:
                f' | product=\"{settings.ISO_LOGS_PRODUCT}\"'
         return log
 
-    def write(self, act: ActionElement, obj, obj_address, result: ActionResult, params=None, sbj=None, sbj_address=None, msg=""):
-        log = self.create_log(act, obj, obj_address, result, params, sbj, sbj_address, msg)
+    def write(self, action: ActionElement, obj, obj_address, result: ActionResult, params=None, sbj=None, sbj_address=None, msg=""):
+        log = self.create_log(action, obj, obj_address, result, params, sbj, sbj_address, msg)
         self.logger.info(log)
 
     def write_string(self, string):
