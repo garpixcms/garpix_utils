@@ -9,7 +9,7 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name='garpix_utils',
-    version='1.10.0-rc23',
+    version='1.10.0-rc24',
     description='',
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -31,9 +31,9 @@ setup(
     include_package_data=True,
     zip_safe=False,
     install_requires=[
-        'Django >= 1.11',
+        'Django >= 1.11, < 5',
         'django-uuslug >= 1.2.0',
-        'django-polymorphic-tree-for-garpix-page >= 2.0.1',
+        'django-polymorphic-tree-for-garpix-page >= 2.2.0',
         'djangorestframework >= 3.13.0'
     ],
 )
