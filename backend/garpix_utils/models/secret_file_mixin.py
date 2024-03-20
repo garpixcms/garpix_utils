@@ -5,7 +5,7 @@ from garpix_utils.string import get_uuid4_hash
 
 class SecretFileMixin(models.Model):
     file = models.FileField(verbose_name='Файл', upload_to=UploadTo('file'), storage=secret_file_storage)
-    share_hash = models.CharField(max_length=32, null=True, default=get_uuid4_hash(), blank=True)
+    share_hash = models.CharField(max_length=32, null=True, default=get_uuid4_hash, blank=True)
 
     class Meta:
         abstract = True
