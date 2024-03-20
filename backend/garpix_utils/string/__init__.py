@@ -9,8 +9,11 @@ def get_random_string(size=8, chars=string.ascii_uppercase + string.digits):
     """
     return ''.join(random.SystemRandom().choice(chars) for _ in range(size))
 
-def get_uuid4_hash(size=32):
-    return str(uuid4()).replace('-', '')[:size]
+def get_uuid4_hash():
+    """
+    Возвращает строку с UUID
+    """
+    return str(uuid4()).replace('-', '')
 
 
 class GenerateHash:
@@ -19,9 +22,7 @@ class GenerateHash:
         self.hash_length = hash_length
 
     def __call__(self):
-        if self.hash_length > 32:
-            return get_random_string(self.hash_length, chars=string.ascii_letters + string.digits)
-        return get_uuid4_hash(self.hash_length)
+        return get_random_string(self.hash_length, chars=string.ascii_letters + string.digits)
 
     def deconstruct(self):
         return ('garpix_utils.string.GenerateHash', [self.hash_length], {})
