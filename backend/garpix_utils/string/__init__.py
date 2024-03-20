@@ -10,8 +10,7 @@ def get_random_string(size=8, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.SystemRandom().choice(chars) for _ in range(size))
 
 def get_uuid4_hash(size=32):
-    uuid = uuid4()
-    return str(uuid).replace('-', '')[:size]
+    return str(uuid4()).replace('-', '')[:size]
 
 
 class GenerateHash:
