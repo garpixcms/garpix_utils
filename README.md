@@ -391,10 +391,11 @@ class AttachmentSerializer(SecretFileSerializerMixin, serializers.ModelSerialize
 1. В нужную модель подключить этот миксин, а также создать отдельный `.js` файл в проекте и также подключить к этой модели.
 ```python
 class SomeModel(models.Model):
-    class SelectTypes(StrChoices):
+    class SelectTypes(TextChoices):
         VAL1 = 'val1', '1'
         VAL2 = 'val2', '2'
         VAL3 = 'val3', '3'
+
     my_choices_field = models.CharField(choices=SelectTypes)
     my_bool_field = models.BooleanField()
 
