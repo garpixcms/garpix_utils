@@ -1,1 +1,2 @@
 from .site_configuration import GarpixSiteConfigurationAdmin
+from .hideable_fields_mixin import HideableFieldsMixin
