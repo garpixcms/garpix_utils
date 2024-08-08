@@ -25,6 +25,7 @@
 * `models.SecretFileMixin` - миксин для моделей, работа со скрытыми файлами
 * `views.SecretFileViewMixin` - миксин для drf viewset, работа со скрытыми файлами
 * `serializers.SecretFileSerializerMixin` - миксин для drf serializer, работа со скрытыми файлами
+* `admin.HideableFieldsMixin` - миксин для скрытия полей в зависимости от значения селекта и чекбокса в админ-панели
 
 ## Установка
 
@@ -377,13 +378,64 @@ from garpix_utils.serializers import SecretFileSerializerMixin
 
 
 class AttachmentSerializer(SecretFileSerializerMixin, serializers.ModelSerializer):
-    
+
     view_basename = 'attachments'
 
     # ...
 ```
 
-`view_basename` - basename view в url. 
+`view_basename` - basename view в url.
+
+#### `admin.HideableFieldsMixin` - миксин для скрытия полей в зависимости от значения селекта и чекбокса в админ-панели
+
+1. В нужную модель подключить этот миксин, а также создать отдельный `.js` файл в проекте и также подключить к этой модели.
+```python
+class SomeModel(models.Model):
+    class SelectTypes(TextChoices):
+        VAL1 = 'val1', '1'
+        VAL2 = 'val2', '2'
+        VAL3 = 'val3', '3'
+
+    my_choices_field = models.CharField(choices=SelectTypes)
+    my_bool_field = models.BooleanField()
+
+    field_1 = ...
+    field_2 = ...
+    field_3 = ...
+
+@admin.register(SomeModel)
+class SomeModelAdmin(HideableFieldsMixin):
+    class Media:
+        js = (
+            'admin/js/some_model.js',
+        )
+```
+
+2. В этом `.js` файле прописать зависимости полей:
+```js
+// admin/js/some_model.js
+
+window.onload = () => {
+    initHideableFields({
+        // Объект, где:
+        // Ключ - значение поля
+        // Значение - массив названий полей в модели, которые будут отображены, в случае выбора этого значения. При этом поля из других значений будут скрыты, если они не перечислены здесь.
+        'val1': [],          // При выборе этого значения, поля 'field_1' и 'field_2' будут скрыты.
+        'val2': ['field_1'], // Будет показано только поле 'field_1'.
+        'val3': [            // Будут показаны оба поля.
+            'field_1',
+            'field_2',
+        ],
+    }, 'my_choices_field');  // Название поля с выбором в модели
+
+    initHideableFields({
+        'on': [           // Состояние - включено, поле 'field_3' показывается.
+            'field_3',
+        ],
+        'off': [],        // Состояние - выключено, поле 'field_3' не показывается.
+    }, 'my_bool_field');  // Название поля с чекбоксом в модели
+}
+```
 
 # Changelog
 
