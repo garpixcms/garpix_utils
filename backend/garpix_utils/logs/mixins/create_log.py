@@ -1,3 +1,4 @@
+from django.db.models import ManyToManyRel
 from garpix_utils.logs.enums.get_enums import Action
 from garpix_utils.logs.services.logger_iso import LoggerIso, ActionResult
 
@@ -82,7 +83,7 @@ class CreateLogMixin:
                 old_new = old_obj_fields[field_name] - new_relations
 
                 if new_old or old_new:
-                    changed_fields += f'{field.field.verbose_name}: '
+                    changed_fields += f'{field.verbose_name}: ' if not isinstance(field, ManyToManyRel) else f'{field.field.verbose_name}: '
                     if new_old:
                         changed_fields += f'+добавлены {new_old} '
                     if old_new:
