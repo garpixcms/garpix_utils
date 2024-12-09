@@ -39,5 +39,5 @@ class UploadToTest(APITestCase):
             self.assertEqual(self.upload(instance, filename), return_)
     
     def test_deconstruct(self) -> None:
-        return_ = ("garpix_utils.file.UploadTo", "test", {})
+        return_ = ("garpix_utils.file.UploadTo", ["test"], {})
         self.assertEqual(self.upload.deconstruct(), return_)
