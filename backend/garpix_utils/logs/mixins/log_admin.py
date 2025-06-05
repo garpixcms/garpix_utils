@@ -14,15 +14,17 @@ class LogAdminMixin(admin.ModelAdmin, CreateLogMixin):
         abstract = True
 
     def save_model(self, request, obj, form, change):
-        log = self.log_change_or_create(ib_logger, request, obj, change)
+        logs = self.logs_change_or_create(ib_logger, request, obj, change)
         super().save_model(request, obj, form, change)
-        ib_logger.write_string(log)
+        for log in logs:
+            ib_logger.write_string(log)
 
     def save_related(self, request, form, formsets, change):
         if change:
-            log = self.log_change_m2m_field(ib_logger, request, super(), form, formsets, change,
+            logs = self.logs_change_m2m_field(ib_logger, request, super(), form, formsets, change,
                                             action_change=Action.any_entity_change.value)
-            ib_logger.write_string(log)
+            for log in logs:
+                ib_logger.write_string(log)
         else:
             super().save_related(request, form, formsets, change)
 

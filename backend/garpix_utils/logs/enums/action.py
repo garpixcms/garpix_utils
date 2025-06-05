@@ -6,45 +6,38 @@ from garpix_utils.logs.services.action_element import ActionElement
 
 class ActionDefault(Enum):
     # 100-199 | Управление учетными записями пользователей
-    user_registration = ActionElement(100, ActionType.user_account, 'Регистрация', ActionLevel.info)
-    user_create = ActionElement(101, ActionType.user_account, 'Создание пользователя', ActionLevel.info)
-    user_change = ActionElement(102, ActionType.user_account, 'Изменение параметров пользователя', ActionLevel.warning)
-    user_delete = ActionElement(103, ActionType.user_account, 'Удаление пользователя', ActionLevel.warning)
+    user_registration = ActionElement(id=100, action_type=ActionType.user_account, name='Registration', code=7)
+    user_create = ActionElement(id=101, action_type=ActionType.user_account, name='Create user', code=7)
+    user_change = ActionElement(id=102, action_type=ActionType.user_account, name='Change user parameters', code=6)
+    user_delete = ActionElement(id=103, action_type=ActionType.user_account, name='Delete user', code=8)
 
     # 200-299 | Идентификация и аутентификация субъекта доступа
-    user_login = ActionElement(200, ActionType.authentication, 'Вход в систему', ActionLevel.info)
-    user_logout = ActionElement(201, ActionType.authentication, 'Выход из системы', ActionLevel.info)
+    user_login = ActionElement(id=200, action_type=ActionType.authentication, name='System Login', code=6)
+    user_logout = ActionElement(id=201, action_type=ActionType.authentication, name='System Logout', code=4)
+    user_fail_login = ActionElement(id=202, action_type=ActionType.authentication, name='System Login', code=8)
 
     # 300-399 | Управление атрибутами доступа
-    user_access = ActionElement(300, ActionType.user_access_attribute, 'Изменение привилегий пользователя',
-                                ActionLevel.warning)
-    group_create = ActionElement(301, ActionType.user_access_attribute, 'Создание группы пользователей',
-                                 ActionLevel.warning)
-    group_change = ActionElement(302, ActionType.user_access_attribute, 'Изменение группы пользователей',
-                                 ActionLevel.warning)
-    group_delete = ActionElement(303, ActionType.user_access_attribute, 'Удаление группы пользователей',
-                                 ActionLevel.warning)
-    group_add_user = ActionElement(304, ActionType.user_access_attribute,
-                                   'Занесение учетной записи в группу пользователей', ActionLevel.warning)
-    group_delete_user = ActionElement(305, ActionType.user_access_attribute,
-                                      'Удаление учетной записи из группы пользователей', ActionLevel.warning)
+    user_access = ActionElement(id=300, action_type=ActionType.user_access_attribute, name='Change user privileges', code=7)
+    group_create = ActionElement(id=301, action_type=ActionType.user_access_attribute, name='Create user group', code=6)
+    group_change = ActionElement(id=302, action_type=ActionType.user_access_attribute, name='Change user group', code=6)
+    group_delete = ActionElement(id=303, action_type=ActionType.user_access_attribute, name='Delete user group', code=8)
+    group_add_user = ActionElement(id=304, action_type=ActionType.user_access_attribute, name='Add user account to user group', code=6)
+    group_delete_user = ActionElement(id=305, action_type=ActionType.user_access_attribute, name='Delete user account from user group', code=6)
 
     # 400-499 | Доступ к защищаемой информации
-    user_exist = ActionElement(400, ActionType.access_information, 'Проверка существования пользователя',
-                               ActionLevel.info)
+    user_exist = ActionElement(id=400, action_type=ActionType.access_information, name='Check user existence', code=3)
 
     # 500-599 | Удаление информации
-    any_entity_delete = ActionElement(500, ActionType.delete_information, 'Удаление сущностей', ActionLevel.info)
+    any_entity_delete = ActionElement(id=500, action_type=ActionType.delete_information, name='Delete entities', code=8)
 
     # 600-699 | Добавление информации
-    any_entity_create = ActionElement(600, ActionType.create_information, 'Создание сущностей', ActionLevel.info)
+    any_entity_create = ActionElement(id=600, action_type=ActionType.create_information, name='Create entities', code=6)
 
     # 700-799 | Изменение информации
-    any_entity_change = ActionElement(700, ActionType.change_information, 'Изменение сущностей', ActionLevel.info)
+    any_entity_change = ActionElement(id=700, action_type=ActionType.change_information, name='Change entities', code=6)
 
     # 800-899 | Изменение конфигураций
-    configuration_change = ActionElement(800, ActionType.change_configuration, 'Изменение конфигураций',
-                                         ActionLevel.info)
+    configuration_change = ActionElement(id=800, action_type=ActionType.change_configuration, name='Change configurations', code=8)
 
     '''
         100-199 | Управление учетными записями пользователей

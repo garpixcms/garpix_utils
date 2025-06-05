@@ -2,7 +2,7 @@ from enum import Enum
 
 
 class ActionLevelDefault(Enum):
-    info = 'Информация'
-    warning = 'Предупреждение'
-    error = 'Ошибка'
-    critical = 'Критическая ошибка'
+    low = 'low'
+    medium = 'medium'
+    high = 'high'
+    very_high = 'very_high'
