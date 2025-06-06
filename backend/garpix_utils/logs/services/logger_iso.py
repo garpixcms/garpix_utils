@@ -20,8 +20,8 @@ class LoggerIso:
         hostname, local_ip = self.get_host_info()
 
         log = self.format_cef_log(
-            event_class_id=action.type.value,
-            name=action.name,
+            event_class_id=action.id,
+            name=action.type,
             severity=action.code,
             src=sbj_address,
             dhost=hostname if hostname else local_ip,

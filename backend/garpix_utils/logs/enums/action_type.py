@@ -2,11 +2,13 @@ from enum import Enum
 
 
 class ActionTypeDefault(Enum):
-    view = "view"
+    authentication = "authentication"
+    user_account = "user_account"
+    user_access_attribute = "user_access_attribute"
+    access = "access"
+    delete = "delete"
     create = "create"
-    edit = "edit"
-    logout = "logout"
-    login = "login"
-    file_upload = "file_upload"
-    calc = "calc" # вынести в глс
-    file_download = "file_download"
+    change = "change"
+    configuration = "configuration"
+    upload = "upload"
+    download = "download"
