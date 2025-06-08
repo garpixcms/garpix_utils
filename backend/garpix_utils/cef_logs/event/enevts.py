@@ -1,5 +1,5 @@
-from .base import BaseEvent
-from ..enums.get_enums import DeviceEventClass, CEFSeverityLevel
+from garpix_utils.cef_logs.event.base import BaseEvent
+from garpix_utils.cef_logs.enums.get_enums import DeviceEventClass, CEFSeverityLevel
 
 
 # === АУТЕНТИФИКАЦИЯ (1000-1099) ===

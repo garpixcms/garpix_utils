@@ -6,7 +6,7 @@ from cef_logger import Event
 from django.conf import settings
 from django.contrib.auth import get_user_model
 
-from ..utils import get_client_ip, get_host_ip, get_hostname
+from garpix_utils.cef_logs.utils import get_client_ip, get_host_ip, get_hostname
 
 
 class BaseEvent(Event, abc.ABC):
