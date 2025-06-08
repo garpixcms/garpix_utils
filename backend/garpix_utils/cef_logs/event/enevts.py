@@ -1,5 +1,11 @@
-from garpix_utils.cef_logs.event.base import BaseEvent
+from django.conf import settings
+from django.utils.module_loading import import_string
+
 from garpix_utils.cef_logs.enums.get_enums import DeviceEventClass, CEFSeverityLevel
+
+
+BaseEventClass = getattr(settings, "CEF_BASE_EVENT_CLASS", "garpix_utils.cef_logs.event.base.BaseEvent")
+BaseEvent = import_string(BaseEventClass)
 
 
 # === АУТЕНТИФИКАЦИЯ (1000-1099) ===
