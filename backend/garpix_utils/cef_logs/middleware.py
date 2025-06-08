@@ -101,16 +101,22 @@ class CEFHttpLoggingMiddleware(MiddlewareMixin):
             params_count = len(request.GET)
             event_data["QueryParamsCount"] = str(params_count)
 
-        # Логирование доступа к файлам
-        if method == "GET" and self._is_file_request(request.path):
-            filename = os.path.basename(request.path)
-            if filename:
-                event_data["fname"] = filename
-                FileAccessEvent()(request=request, user=request.user, msg=f"File access: {filename}")
-
         try:
-            # Выбираем соответствующий тип события
-            if response.status_code >= 400:
+            # Логирование доступа к файлам
+            if method == "GET" and self._is_file_request(request.path):
+                filename = os.path.basename(request.path)
+                if filename:
+                    event_data["fname"] = filename
+                    event_data["msg"] = f"File access: {filename}"
+                if response.status_code in [401, 403]:
+                    outcome = CEFOutcome.DENIED.value
+                elif response.status_code >= 400:
+                    outcome = CEFOutcome.FAILURE.value
+                else:
+                    outcome = CEFOutcome.SUCCESS.value
+                event_data["outcome"] = outcome
+                event = FileAccessEvent()
+            elif response.status_code >= 400:
                 event = HttpErrorEvent()
                 event_data["msg"] = f"{request.path} - HTTP {response.status_code}"
             else:
@@ -128,9 +134,8 @@ class CEFHttpLoggingMiddleware(MiddlewareMixin):
                 "user": getattr(request, "user", None)
                 if hasattr(request, "user")
                 else None,
-                "msg": f"{request.method} {request.path} - Exception: {str(exception)}",
+                "msg": f"Exception: {str(exception)}",
                 "outcome": CEFOutcome.FAILURE.value,
-                "HTTPStatus": "500",
                 "UserAgent": request.META.get("HTTP_USER_AGENT", "Unknown"),
                 "ExceptionType": str(type(exception).__name__),
             }

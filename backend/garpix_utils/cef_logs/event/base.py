@@ -1,10 +1,11 @@
 import abc
-from logging import StreamHandler
 from time import time
 
 from cef_logger import Event
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.utils.module_loading import import_string
+
 
 from garpix_utils.cef_logs.utils import get_client_ip, get_host_ip, get_hostname
 
@@ -13,7 +14,10 @@ class BaseEvent(Event, abc.ABC):
     DeviceVendor = getattr(settings, "CEF_DEVICE_VENDOR", "Garpix")
     DeviceProduct = getattr(settings, "CEF_DEVICE_PRODUCT", "Django Application")
     DeviceVersion = getattr(settings, "CEF_DEVICE_VERSION", "1.0.0")
-    EMITTERS = getattr(settings, "CEF_EMITTERS", (StreamHandler(),))
+    EMITTERS = [
+        import_string(emmiter)()
+        for emmiter in getattr(settings, "CEF_EMITTERS", ("logging.StreamHandler",))
+    ]
     Version = 0
 
     src = None
