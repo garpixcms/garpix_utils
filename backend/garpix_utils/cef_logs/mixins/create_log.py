@@ -29,9 +29,9 @@ class CreateLogMixin:
             else f"Объект {title}(id={obj.pk}) модели {obj.__class__.__name__} был удален"
         )
         if obj.__class__ == User:
-            return UserDeleteEvent(request=request, user=request.user, msg=msg)
+            return (UserDeleteEvent(), {"request": request, "user": request.user, "msg": msg})
         else:
-            return DataDeleteEvent(request=request, user=request.user, msg=msg)
+            return (DataDeleteEvent(), {"request": request, "user": request.user, "msg": msg})
 
     @staticmethod
     def logs_change_or_create(request, obj, change):
@@ -47,11 +47,11 @@ class CreateLogMixin:
                     msg = f"Изменен параметр {field} с {difference['old']} на {difference['new']} в модели {obj.__class__.__name__} у объекта {title}(id={obj.pk})"
                 if obj.__class__ == User:
                     events.append(
-                        UserUpdateEvent(request=request, user=request.user, msg=msg)
+                        (UserUpdateEvent(), {"request": request, "user": request.user, "msg": msg})
                     )
                 else:
                     events.append(
-                        DataModifyEvent(request=request, user=request.user, msg=msg)
+                        (DataModifyEvent(), {"request": request, "user": request.user, "msg": msg})
                     )
         else:
             if CreateLogMixin.log_msg_create:
@@ -60,10 +60,10 @@ class CreateLogMixin:
                 msg = f"Создан объект {title} модели {obj.__class__.__name__}"
 
             if obj.__class__ == User:
-                events = [UserCreateEvent(request=request, user=request.user, msg=msg)]
+                events = [(UserCreateEvent(), {"request": request, "user": request.user, "msg": msg})]
             else:
-                events = [DataCreateEvent(request=request, user=request.user, msg=msg)]
-            return events
+                events = [(DataCreateEvent(), {"request": request, "user": request.user, "msg": msg})]
+        return events
 
     @staticmethod
     def logs_change_m2m_field(
@@ -90,7 +90,7 @@ class CreateLogMixin:
         params = get_changed_m2m_fields(obj, old_obj_fields, exclude_fields)
 
         if not params:
-            return
+            return []
 
         events = []
 
@@ -98,14 +98,14 @@ class CreateLogMixin:
             if CreateLogMixin.log_msg_change:
                 msg = CreateLogMixin.log_msg_change
             else:
-                msg = f"Изменен параметр {key} в модели {obj.__class__.__name__} у объекта{str(obj)}(id={obj.pk}). "
+                msg = f"Изменен параметр {key} в модели {obj.__class__.__name__} у объекта {str(obj)}(id={obj.pk}). "
                 if difference["added"]:
                     msg += f"Добавлены {difference['added']}"
                 if difference["removed"]:
                     msg += f"Удалены {difference['removed']}"
 
-                events.append(
-                    DataModifyEvent(request=request, user=request.user, msg=msg)
-                )
+            events.append(
+                (DataModifyEvent(), {"request": request, "user": request.user, "msg": msg})
+            )
 
         return events

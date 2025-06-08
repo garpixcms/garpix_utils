@@ -6,7 +6,7 @@ from django.conf import settings
 from django.utils.deprecation import MiddlewareMixin
 
 from garpix_utils.cef_logs.enums.get_enums import CEFOutcome
-from garpix_utils.cef_logs.event import HttpErrorEvent, HttpEvent
+from garpix_utils.cef_logs.event import HttpErrorEvent, HttpEvent, FileAccessEvent
 
 
 class CEFHttpLoggingMiddleware(MiddlewareMixin):
@@ -106,6 +106,7 @@ class CEFHttpLoggingMiddleware(MiddlewareMixin):
             filename = os.path.basename(request.path)
             if filename:
                 event_data["fname"] = filename
+                FileAccessEvent()(request=request, user=request.user, msg=f"File access: {filename}")
 
         try:
             # Выбираем соответствующий тип события
