@@ -5,7 +5,7 @@ import time
 from django.conf import settings
 from django.utils.deprecation import MiddlewareMixin
 
-from garpix_utils.cef_logs.enums.get_enums import CEFOutcome
+from garpix_utils.cef_logs.enums.get_enums import CEFOutcome, CEFSeverityLevel
 from garpix_utils.cef_logs.event import (
     HttpErrorEvent,
     HttpEvent,
@@ -157,6 +157,9 @@ class CEFHttpLoggingMiddleware(MiddlewareMixin):
                 event_data["msg"] = f"{request.path} - HTTP {response.status_code}"
             else:
                 event = HttpEvent() if not is_api else ApiCallEvent()
+
+            if method == "DELETE":
+                event.Severity = CEFSeverityLevel.HIGH.value
             event(**event_data)
 
         except Exception as e:

@@ -8,6 +8,7 @@ from django.utils.module_loading import import_string
 
 
 from garpix_utils.cef_logs.utils import get_client_ip, get_host_ip, get_hostname
+from garpix_utils.cef_logs.enums.get_enums import CEFOutcome
 
 
 class BaseEvent(Event, abc.ABC):
@@ -27,7 +28,7 @@ class BaseEvent(Event, abc.ABC):
     end = None
     fname = None
     msg = None
-    outcome = None
+    outcome = CEFOutcome.SUCCESS.value
     suid = None
     suser = None
 
