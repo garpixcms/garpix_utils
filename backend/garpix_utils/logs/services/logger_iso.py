@@ -10,7 +10,7 @@ from garpix_utils.logs.services.action_element import ActionElement
 
 class LoggerIso:
 
-    def __init__(self, logger_name=settings.ISO_LOGS_NAME):
+    def __init__(self, logger_name=getattr(settings, "ISO_LOGS_NAME", __name__)):
         self.logger = logging.getLogger(logger_name)
 
     def create_log(self, action: ActionElement, obj, obj_address, result: ActionResult,
@@ -31,7 +31,7 @@ class LoggerIso:
         log += f' | host=\"{hostname}\"' \
                f' | host_addr=\"{local_ip}\"'\
                f' | vendor=\"{getattr(settings, "ISO_LOGS_VENDOR", "Garpix")}\"'\
-               f' | product=\"{settings.ISO_LOGS_PRODUCT}\"'
+               f' | product=\"{getattr(settings, "ISO_LOGS_PRODUCT", "Default product name")}\"'
         return log
 
     def write(self, action: ActionElement, obj, obj_address, result: ActionResult, params=None, sbj=None, sbj_address=None, msg=""):
