@@ -4,6 +4,7 @@ import time
 
 from django.conf import settings
 from django.utils.deprecation import MiddlewareMixin
+from django.urls import reverse, NoReverseMatch
 
 from garpix_utils.cef_logs.enums.get_enums import CEFOutcome, CEFSeverityLevel
 from garpix_utils.cef_logs.event import (
@@ -37,9 +38,7 @@ class CEFHttpLoggingMiddleware(MiddlewareMixin):
         self.logger = logging.getLogger(__name__)
         # Пути, которые нужно исключить из логирования
         self.excluded_paths = getattr(
-            settings,
-            "CEF_LOGGING_EXCLUDED_PATHS",
-            ["/admin/jsi18n/", "favicon.ico"],
+            settings, "CEF_LOGGING_EXCLUDED_PATHS", self._get_default_excluded_paths()
         )
         self.methods_to_log = getattr(
             settings,
@@ -57,6 +56,23 @@ class CEFHttpLoggingMiddleware(MiddlewareMixin):
             ],
         )
         super().__init__(get_response)
+
+    def _get_default_excluded_paths(self):
+        excluded_paths = []
+
+        try:
+            jsi18n_url = reverse("admin:jsi18n")
+            excluded_paths.append(jsi18n_url)
+        except NoReverseMatch:
+            excluded_paths.append("/admin/jsi18n/")
+
+        excluded_paths.extend(
+            [
+                "/favicon.ico",
+            ]
+        )
+
+        return excluded_paths
 
     def __call__(self, request):
         start_time = time.time()

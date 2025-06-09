@@ -11,6 +11,9 @@ from garpix_utils.cef_logs.utils import get_client_ip, get_host_ip, get_hostname
 from garpix_utils.cef_logs.enums.get_enums import CEFOutcome
 
 
+User = get_user_model()
+
+
 class BaseEvent(Event, abc.ABC):
     DeviceVendor = getattr(settings, "CEF_DEVICE_VENDOR", "Garpix")
     DeviceProduct = getattr(settings, "CEF_DEVICE_PRODUCT", "Django Application")
@@ -33,7 +36,6 @@ class BaseEvent(Event, abc.ABC):
     suser = None
 
     def __call__(self, **fields):
-        User = get_user_model()
         user = fields.pop("user", None)
         request = fields.pop("request", None)
         if "fname" in fields:
