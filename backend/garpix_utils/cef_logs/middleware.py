@@ -6,7 +6,13 @@ from django.conf import settings
 from django.utils.deprecation import MiddlewareMixin
 
 from garpix_utils.cef_logs.enums.get_enums import CEFOutcome
-from garpix_utils.cef_logs.event import HttpErrorEvent, HttpEvent, FileAccessEvent
+from garpix_utils.cef_logs.event import (
+    HttpErrorEvent,
+    HttpEvent,
+    FileAccessEvent,
+    ApiErrorEvent,
+    ApiCallEvent,
+)
 
 
 class CEFHttpLoggingMiddleware(MiddlewareMixin):
@@ -16,7 +22,14 @@ class CEFHttpLoggingMiddleware(MiddlewareMixin):
     Логирует:
     - Все HTTP запросы (GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS, CONNECT, TRACE)
       с уровнем Low через универсальное HttpEvent
+      или ApiCallEvent, если запрос относится к API
+    - HTTP запросы (статус >= 200) с уровнем Low через HttpEvent
     - HTTP ошибки (статус >= 400) с уровнем Medium через HttpErrorEvent
+    - API запросы (статус >= 400) с уровнем Medium через ApiErrorEvent
+    - API запросы (статус >= 200) с уровнем Low через ApiCallEvent
+    - Доступ к файлам (статус >= 400) с уровнем Medium через FileAccessEvent
+    - Доступ к файлам (статус >= 200) с уровнем Low через FileAccessEvent
+
     """
 
     def __init__(self, get_response):
@@ -27,6 +40,21 @@ class CEFHttpLoggingMiddleware(MiddlewareMixin):
             settings,
             "CEF_LOGGING_EXCLUDED_PATHS",
             ["/admin/jsi18n/", "favicon.ico"],
+        )
+        self.methods_to_log = getattr(
+            settings,
+            "CEF_METHODS_TO_LOG",
+            [
+                "GET",
+                "POST",
+                "PUT",
+                "PATCH",
+                "DELETE",
+                "HEAD",
+                "OPTIONS",
+                "CONNECT",
+                "TRACE",
+            ],
         )
         super().__init__(get_response)
 
@@ -49,6 +77,10 @@ class CEFHttpLoggingMiddleware(MiddlewareMixin):
                 return True
         return False
 
+    def _is_api_request(self, path):
+        api_url = getattr(settings, "CEF_API_URLS", ["/api/"])
+        return any(path.startswith(url) for url in api_url)
+
     def _is_file_request(self, path):
         """
         Проверяет, является ли запрос запросом к статическому или медиа файлу.
@@ -60,6 +92,8 @@ class CEFHttpLoggingMiddleware(MiddlewareMixin):
 
     def _log_request(self, request, response, response_time, start_time, end_time):
         method = request.method.upper()
+        if method not in self.methods_to_log:
+            return
 
         # Определяем outcome на основе статуса ответа
         if 200 <= response.status_code < 300:
@@ -102,6 +136,8 @@ class CEFHttpLoggingMiddleware(MiddlewareMixin):
             event_data["QueryParamsCount"] = str(params_count)
 
         try:
+            is_api = self._is_api_request(request.path)
+
             # Логирование доступа к файлам
             if method == "GET" and self._is_file_request(request.path):
                 filename = os.path.basename(request.path)
@@ -117,11 +153,10 @@ class CEFHttpLoggingMiddleware(MiddlewareMixin):
                 event_data["outcome"] = outcome
                 event = FileAccessEvent()
             elif response.status_code >= 400:
-                event = HttpErrorEvent()
+                event = HttpErrorEvent() if not is_api else ApiErrorEvent()
                 event_data["msg"] = f"{request.path} - HTTP {response.status_code}"
             else:
-                event = HttpEvent()
-
+                event = HttpEvent() if not is_api else ApiCallEvent()
             event(**event_data)
 
         except Exception as e:
@@ -140,7 +175,8 @@ class CEFHttpLoggingMiddleware(MiddlewareMixin):
                 "ExceptionType": str(type(exception).__name__),
             }
 
-            event = HttpErrorEvent()
+            is_api = self._is_api_request(request.path)
+            event = HttpErrorEvent() if not is_api else ApiErrorEvent()
             event(**event_data)
 
         except Exception as e:
