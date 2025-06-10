@@ -138,14 +138,6 @@ class CEFHttpLoggingMiddleware(MiddlewareMixin):
             "end": int(end_time),
         }
 
-        # Добавляем информацию о теле запроса для POST/PUT/PATCH
-        if method in ["POST", "PUT", "PATCH"] and hasattr(request, "body"):
-            try:
-                body_size = len(request.body)
-                event_data["RequestBodySize"] = str(body_size)
-            except Exception:
-                pass
-
         # Добавляем параметры для GET запросов
         if method == "GET" and request.GET:
             params_count = len(request.GET)

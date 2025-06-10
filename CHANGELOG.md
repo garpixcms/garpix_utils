@@ -1,3 +1,7 @@
+### 1.11.1 (10.06.25)
+
+- Исправлен баг в `CEFHttpLoggingMiddleware`
+
 ### 1.11.0 (09.06.25)
 
 - **[DEPRECETED]** (`garpix_utils.logs`)
