@@ -1,17 +1,33 @@
 import abc
 from time import time
+from typing import Any, Dict, Union
 
 from cef_logger import Event
+from cef_logger.schemas import ExtensionFields
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.utils.module_loading import import_string
+from pydantic.fields import ModelField
 
-
-from garpix_utils.cef_logs.utils import get_client_ip, get_host_ip, get_hostname
 from garpix_utils.cef_logs.enums.get_enums import CEFOutcome
-
+from garpix_utils.cef_logs.utils import get_client_ip, get_host_ip, get_hostname
 
 User = get_user_model()
+
+
+def truncate_dict_by_model(
+        data: Dict[str, Any]
+) -> Dict[str, Any]:
+    cleaned = data.copy()
+    for name, value in list(cleaned.items()):
+        field: Union[ModelField, None] = ExtensionFields.__fields__.get(name)
+        if not field:
+            continue
+        max_len = field.field_info.max_length
+        if max_len is not None and isinstance(value, str):
+            if len(value) > max_len:
+                cleaned[name] = value[:max_len]
+    return cleaned
 
 
 class BaseEvent(Event, abc.ABC):
@@ -36,6 +52,9 @@ class BaseEvent(Event, abc.ABC):
     suser = None
 
     def __call__(self, **fields):
+
+        fields = truncate_dict_by_model(fields)
+
         user = fields.pop("user", None)
         request = fields.pop("request", None)
         if "fname" in fields:
